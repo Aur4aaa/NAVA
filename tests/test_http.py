@@ -262,4 +262,3 @@ class HttpWorkflowTests(TestCase):
             with self.subTest(kind=kind):
                 self.assertEqual(self.client.get(f'/records/{kind}/{record.pk}/').status_code, 200)
                 self.assertEqual(self.client.get(f'/records/{kind}/{record.pk}/edit/').status_code, 200)
-
