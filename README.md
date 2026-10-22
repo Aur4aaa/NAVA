@@ -12,7 +12,7 @@ This delivery implements the Milestone 1 foundation and selected operational fea
 - A local writable project folder, a browser, and Internet access to install the packages in `requirements.txt`.
 - No Docker, cloud account, Redis, API key, or separately configured database.
 
-Dependencies are pinned in [requirements.txt](requirements.txt). Django 5.2.18, SQLite, Waitress 3.0.2, and WhiteNoise 6.11.0 provide the core runtime. **Windows commands are provided, but Windows execution has not been tested in this Linux environment.**
+Dependencies are pinned in [requirements.txt](requirements.txt). Django 5.2.18, SQLite, Waitress 3.0.2, and WhiteNoise 6.11.0 provide the core runtime. Automated setup and the full test suite pass on Ubuntu and Windows GitHub runners. Windows 11 workstation and browser qualification remains pending.
 
 ## Install and launch on Windows 11
 
@@ -97,7 +97,7 @@ The default data directory is `.runtime`, containing `nava.sqlite3`, private evi
 .\.venv\Scripts\python.exe -m unittest tests.test_operations -v
 ```
 
-The full suite passed **76 tests** on Linux with Python 3.12.14: domain workflows, HTTP authorization and forms, exports and audit packages, catalog integrity, demo seeding, and recovery. The [delivery checklist](docs/continuation.md) maps those checks to the requested acceptance criteria. A GitHub Actions workflow is configured for Ubuntu and Windows; configuration alone is not a passing run. Tests demonstrate software behavior, not external audit acceptance.
+The full suite passed **76 tests** locally on Linux with Python 3.12.14 and on both Ubuntu and Windows GitHub runners: domain workflows, HTTP authorization and forms, exports and audit packages, catalog integrity, demo seeding, and recovery. See the [passing CI run](https://github.com/Aur4aaa/NAVA/actions/runs/39714197780) and the [delivery checklist](docs/continuation.md) for evidence and acceptance criteria. Desktop/mobile browser checks, a fresh installation, and a live backup/restore were also verified on Linux. Tests demonstrate software behavior, not external audit acceptance.
 
 ## Further guidance
 

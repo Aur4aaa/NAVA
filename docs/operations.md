@@ -4,7 +4,7 @@
 
 The supported initial operating pattern is one organization on one computer, using a local browser. `scripts/start.py` always binds Waitress to `127.0.0.1`. Authentication, CSRF checks, record permissions, and authenticated evidence downloads apply locally as well as remotely.
 
-Windows 11 is the intended initial platform; automated checks in this delivery ran under Linux with Python 3.12.14. Windows-specific file locking and launch behavior require validation on the target machine before operational adoption. Do not represent these commands as Windows-tested.
+Windows 11 is the intended initial platform. Automated setup and all 76 tests passed on Ubuntu and Windows GitHub runners, including maintenance-lock contention and recovery. Local browser, launcher, fresh-install, and live-recovery checks ran under Linux with Python 3.12.14. Windows 11 workstation startup, browser behavior, and operational qualification still require validation on the target machine; CI is not a substitute for those checks. See the [validation record](continuation.md#validation-record).
 
 For a shared-network deployment, complete a separate hardening task: HTTPS reverse proxy, trusted host configuration, secure cookies, restricted filesystem/service account, operating-system patching, a tested backup schedule, review of proxy headers, capacity testing, and shared database configuration. The provided launcher deliberately does not expose a network bind flag. PostgreSQL migration is described in [architecture](architecture.md); it is not configured by the local setup.
 

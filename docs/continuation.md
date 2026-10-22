@@ -19,7 +19,7 @@ Asset, supplier, and objective models exist and are used in the demo. Dedicated 
 
 ## Validation record
 
-On **21 October 2026**, Linux / Python **3.12.14**:
+Local validation used Linux / Python **3.12.14**:
 
 ```sh
 .venv/bin/python manage.py test tests --noinput --verbosity 1
@@ -34,7 +34,7 @@ Additional Linux integration checks passed:
 - **Fresh installation:** copied source into a new path containing spaces, with no virtual environment, database, or secret; `python scripts/setup.py --no-admin` installed the pinned packages, migrated, and seeded 93 reference controls. The resulting database had zero users, organizations, or business records. `python scripts/start.py --port 8001` launched Waitress via system Python; health and login requests returned HTTP 200.
 - **Repeatability:** `scripts/setup.py --skip-install --no-admin` preserved the demonstration records and refreshed the installation.
 
-Windows execution is not locally verified. The repository includes Ubuntu/Windows GitHub Actions jobs, whose outcome must be checked on the actual run.
+On **22 October 2026**, [GitHub Actions run 39714197780](https://github.com/Aur4aaa/NAVA/actions/runs/39714197780) passed automated setup and all 76 tests on both Ubuntu and Windows runners. This includes Windows maintenance-lock contention, exception cleanup, and recovery. Windows 11 workstation startup and browser workflows remain unverified; the local integration checks above ran on Linux.
 
 ## Requested acceptance criteria
 
@@ -56,10 +56,10 @@ Windows execution is not locally verified. The repository includes Ubuntu/Window
 | 12 | Separate Stage 1, Stage 2, certification decision | Tested distinct audit types and evidence requirements for a recorded granted decision. Demo decision remains pending. |
 | 13 | Actionable expired evidence/overdue work | Tested dashboard and filtered record links. Broader notifications and recurring review policies remain deferred. |
 | 14 | Avoid duplicate setup/recurrence records | Tested catalog, role, demo, and recurring-task idempotence. Existing records are preserved. |
-| 15 | Back up/restore DB and evidence intact | Eight recovery tests cover roundtrip, hashes, paths with spaces, locks, archive safety, and overwrite preservation. A live demo backup and new-directory restore also passed manifest and SQLite checks. |
+| 15 | Back up/restore DB and evidence intact | Nine recovery tests cover roundtrip, hashes, paths with spaces, locks, exception cleanup, archive safety, and overwrite preservation. A live demo backup and new-directory restore also passed manifest and SQLite checks. |
 | 16 | Validated CSV import without silent partial writes | **Deferred.** Export is implemented; no import button or pretend import workflow is exposed. |
 | 17 | Reject concurrent stale edits | Tested optimistic revision checks, stale HTTP submissions, frozen version protection, and frozen relation mutation guards. Full load/concurrency qualification is deferred. |
-| 18 | New installation using documented process | Clean Linux setup in a path with spaces and Waitress start/health/login checks passed; Windows commands and CI jobs supplied. Windows 11 operational acceptance is still required. |
+| 18 | New installation using documented process | Clean Linux setup in a path with spaces and Waitress start/health/login checks passed. Automated setup and tests pass on both Ubuntu and Windows CI. Windows 11 operational acceptance is still required. |
 
 ## Remaining scope, in order
 
@@ -67,8 +67,8 @@ Windows execution is not locally verified. The repository includes Ubuntu/Window
 2. **Complete operational registers.** Add asset/supplier lifecycle interfaces, competence/training, access reviews, incidents, changes, restoration/continuity exercises, structured objectives, and acknowledgments. Reuse the existing ownership, evidence, task, approval, and event services.
 3. **Imports and collaboration.** Add atomic CSV preview/validation/duplicate handling, bulk assignment, comments, notifications, saved filters, and board/calendar views. Extend recurring tasks into explicit recurring-review policies.
 4. **Assurance depth.** Add audit programs, interviews/sampling/working papers, richer management-review inputs, configurable finding severity, lifecycle retention/deletion controls, and surveillance/renewal maintenance. Current certification records require evidence for a granted decision; they do not automate certification-body arrangements.
-5. **Operational qualification.** Run Windows 11 fresh setup, stop/restart, file-lock contention, Unicode/space-containing paths, large uploads, backup/restore, updates/rollback, and browser accessibility tests. Verify GitHub CI outcomes separately from this Linux validation.
+5. **Operational qualification.** Run Windows 11 workstation setup, stop/restart, file-lock contention, Unicode/space-containing paths, large uploads, backup/restore, updates/rollback, and browser accessibility tests. Ubuntu/Windows CI is passing; target-machine qualification remains separate.
 6. **Shared deployment.** Implement the documented PostgreSQL migration path, coordinated database/file recovery, HTTPS/service deployment, stronger configurable permissions, shared-service rate limiting, malware scanning, and monitoring.
 7. **Optional services.** Add AI drafting, email/calendar adapters, SSO, or external storage only after explicit provider configuration and data-sharing controls. None are enabled by this delivery.
 
-No deployment, certificate, certification-body approval, Windows execution, or PostgreSQL operation is implied by a passing software test. Preserve the working local workflow and a verified backup while implementing the next complete increment.
+No deployment, certificate, certification-body approval, Windows 11 workstation qualification, or PostgreSQL operation is implied by a passing software test. Preserve the working local workflow and a verified backup while implementing the next complete increment.
