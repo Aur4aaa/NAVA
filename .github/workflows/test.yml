@@ -1,0 +1,26 @@
+name: Test workspace
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/setup.py --no-admin
+      - name: Test (Linux)
+        if: runner.os != 'Windows'
+        run: .venv/bin/python manage.py test tests --noinput
+      - name: Test (Windows)
+        if: runner.os == 'Windows'
+        run: .\.venv\Scripts\python.exe manage.py test tests --noinput

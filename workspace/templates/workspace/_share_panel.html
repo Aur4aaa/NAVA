@@ -1,0 +1,4 @@
+{% load ui %}
+{% if share_form %}
+<section class="panel share-panel"><details><summary><span>{% icon 'lock' 17 %}<strong>Manage record access</strong></span>{% icon 'down' 14 %}</summary><p class="share-help">Explicit access can be changed without revising approved content. External auditor access is limited to evidence and audit packages and requires a future expiry. Share any included evidence separately.</p><form action="{{ share_url }}" method="post">{% csrf_token %}{% include 'workspace/_form_fields.html' with form=share_form %}<div class="share-help">Selecting no users removes explicit grants. Existing access through roles, ownership, or authorship still applies.</div><div class="share-footer"><button class="button button-secondary" type="submit">{% icon 'check' 15 %} Save access</button></div></form></details></section>
+{% endif %}
