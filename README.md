@@ -97,7 +97,7 @@ The default data directory is `.runtime`, containing `nava.sqlite3`, private evi
 .\.venv\Scripts\python.exe -m unittest tests.test_operations -v
 ```
 
-The full suite passed **75 tests** on Linux with Python 3.12.14 on 21 October 2026: domain workflows, HTTP authorization and forms, exports and audit packages, catalog integrity, demo seeding, and recovery. The [delivery checklist](docs/continuation.md) maps those checks to the requested acceptance criteria. A GitHub Actions workflow is configured for Ubuntu and Windows; configuration alone is not a passing run. Tests demonstrate software behavior, not external audit acceptance.
+The full suite passed **76 tests** on Linux with Python 3.12.14: domain workflows, HTTP authorization and forms, exports and audit packages, catalog integrity, demo seeding, and recovery. The [delivery checklist](docs/continuation.md) maps those checks to the requested acceptance criteria. A GitHub Actions workflow is configured for Ubuntu and Windows; configuration alone is not a passing run. Tests demonstrate software behavior, not external audit acceptance.
 
 ## Further guidance
 

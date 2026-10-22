@@ -195,8 +195,10 @@ class DomainTests(TestCase):
         self.assertEqual(new.version, 2)
         self.assertEqual(new.previous_id, original.pk)
         self.assertNotEqual(new.file.name, original.file.name)
-        self.assertEqual(original.file.read(), b'Fictional evidence test bytes.')
-        self.assertEqual(new.file.read(), b'Updated sample bytes.')
+        with original.file.open('rb') as original_file:
+            self.assertEqual(original_file.read(), b'Fictional evidence test bytes.')
+        with new.file.open('rb') as new_file:
+            self.assertEqual(new_file.read(), b'Updated sample bytes.')
         self.assertEqual(new.status, 'uploaded')
 
     def test_evidence_acceptance_requires_review_and_nonexpired_period(self):
@@ -259,7 +261,8 @@ class DomainTests(TestCase):
         s.share_record(self.manager, evidence, [self.external], expires_at=expiry, reason='Time limited audit review')
         self.assertTrue(can_view(self.external, evidence))
         self.assertEqual(evidence.status, 'accepted')
-        self.assertEqual(evidence.file.read(), b'Fictional evidence test bytes.')
+        with evidence.file.open('rb') as evidence_file:
+            self.assertEqual(evidence_file.read(), b'Fictional evidence test bytes.')
         new = s.upload_evidence(self.manager, SimpleUploadedFile('new.txt', b'New evidence.'), previous=evidence, title='Updated review')
         self.assertEqual(new.access_expires, expiry)
         self.assertEqual(new.classification, 'restricted')

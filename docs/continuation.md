@@ -25,7 +25,7 @@ On **21 October 2026**, Linux / Python **3.12.14**:
 .venv/bin/python manage.py test tests --noinput --verbosity 1
 ```
 
-**75 tests passed; no skipped or expected-failure tests.** Django system checks reported no issues; `makemigrations --check --dry-run` found no schema drift and `pip check` found no dependency conflicts. The suite contains 32 domain tests, 12 HTTP tests, 13 export/package tests, five catalog tests, five demo tests, and eight recovery tests. Permission-denial and not-found log messages during these tests are expected assertions of access boundaries.
+**76 tests passed; no skipped or expected-failure tests.** Django system checks reported no issues; `makemigrations --check --dry-run` found no schema drift and `pip check` found no dependency conflicts. The suite contains 32 domain tests, 12 HTTP tests, 13 export/package tests, five catalog tests, five demo tests, and nine recovery tests. Permission-denial and not-found log messages during these tests are expected assertions of access boundaries.
 
 Additional Linux integration checks passed:
 

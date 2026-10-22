@@ -1,6 +1,7 @@
 """Filesystem recovery tests use a disposable SQLite database and private evidence."""
 import hashlib
 import json
+from contextlib import closing
 from pathlib import Path
 import sqlite3
 import tempfile
@@ -22,7 +23,9 @@ class RecoveryTests(unittest.TestCase):
         self.original = b"Private evidence version one\x00\x01"
         (self.data / "evidence" / "2026" / "record.bin").write_bytes(self.original)
         (self.data / "secret.key").write_text("unit-test-secret-never-a-real-credential")
-        with sqlite3.connect(self.data / "nava.sqlite3") as db:
+        # sqlite3's context manager commits/rolls back but does not close the
+        # connection. Explicit closure is required before Windows file cleanup.
+        with closing(sqlite3.connect(self.data / "nava.sqlite3")) as db, db:
             db.execute("CREATE TABLE django_migrations (id INTEGER PRIMARY KEY, app TEXT)")
             db.execute("INSERT INTO django_migrations (app) VALUES ('workspace')")
             db.execute("CREATE TABLE workspace_evidenceversion (id INTEGER PRIMARY KEY, file TEXT)")
@@ -38,7 +41,7 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(restored_manifest, manifest)
         self.assertEqual((destination / "evidence" / "2026" / "record.bin").read_bytes(), self.original)
         self.assertEqual((destination / "secret.key").read_bytes(), (self.data / "secret.key").read_bytes())
-        with sqlite3.connect(destination / "nava.sqlite3") as db:
+        with closing(sqlite3.connect(destination / "nava.sqlite3")) as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM workspace_evidenceversion").fetchone()[0], 1)
 
     def test_running_server_lock_refuses_backup_and_restore(self):
@@ -48,6 +51,18 @@ class RecoveryTests(unittest.TestCase):
                 create_backup(self.data, self.root / "second.zip")
             with self.assertRaisesRegex(RuntimeError, "running"):
                 restore_backup(self.archive, self.data, overwrite=True)
+
+    def test_operation_lock_releases_after_failed_maintenance(self):
+        with self.assertRaisesRegex(ValueError, "maintenance failed"):
+            with operation_lock(self.data):
+                raise ValueError("maintenance failed")
+        with operation_lock(self.data):
+            with self.assertRaisesRegex(RuntimeError, "running"):
+                with operation_lock(self.data):
+                    self.fail("A competing operation acquired the same lock")
+        # A failed contender must not interfere with subsequent acquisition.
+        with operation_lock(self.data):
+            pass
 
     def test_overwrite_requires_explicit_flag_and_preserves_original(self):
         create_backup(self.data, self.archive)

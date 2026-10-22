@@ -33,14 +33,16 @@ def operation_lock(directory: Path):
     """Coordinate managed server and maintenance operations; never use stale PID locks."""
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / "operation.lock"
-    stream = path.open("a+b")
+    stream = None
     try:
-        stream.seek(0)
-        if stream.read(1) == b"":
-            stream.write(b"0")
-            stream.flush()
-        stream.seek(0)
         try:
+            # Windows byte-range locks also prevent reads of the locked byte.
+            # Inspect file metadata rather than reading it before acquisition.
+            # An unbuffered handle prevents a deferred flush after a failed lock.
+            stream = path.open("a+b", buffering=0)
+            if os.fstat(stream.fileno()).st_size == 0:
+                stream.write(b"0")
+            stream.seek(0)
             if os.name == "nt":
                 import msvcrt
                 msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
@@ -51,7 +53,10 @@ def operation_lock(directory: Path):
             raise RuntimeError("NAVA is running or another maintenance operation holds the lock. Stop it before continuing.") from exc
         yield
     finally:
-        stream.close()
+        # Closing the acquired handle releases its OS lock, including when the
+        # protected operation raises. A failed contender closes only its handle.
+        if stream is not None:
+            stream.close()
 
 
 def fail(message: str) -> None:
